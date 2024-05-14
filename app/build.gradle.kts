@@ -12,7 +12,7 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "template.app.id"
+        applicationId = "com.adamgeraghty.app"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
@@ -54,11 +54,10 @@ android {
         }
     }
 
-    namespace = "template"
+    namespace = "com.adamgeraghty.app"
 }
 
 dependencies {
-    ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)
     ksp(libs.square.moshi.kotlin.codegen)
 
@@ -70,7 +69,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.room.runtime)
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling)
@@ -84,7 +82,6 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.square.leakcanary)
 
-    annotationProcessor(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
 

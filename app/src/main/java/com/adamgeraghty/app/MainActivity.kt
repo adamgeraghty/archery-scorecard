@@ -4,13 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.adamgeraghty.app.theme.ScorecardMaterialTheme
+import com.adamgeraghty.app.ui.navigation.ScorecardNavGraph
+import com.adamgeraghty.app.ui.navigation.Screens
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,10 +24,12 @@ class MainActivity : ComponentActivity() {
             ConfigureEdgeToEdgeWindow()
 
             ScorecardMaterialTheme {
-                Surface(
-                    color = MaterialTheme.colorScheme.background,
-                ) {
-                    Greeting("Android")
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    val navController = rememberNavController()
+                    ScorecardNavGraph(
+                        navController,
+                        Screens.HomeScreen.route
+                    )
                 }
             }
         }
@@ -43,7 +50,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}

@@ -13,7 +13,7 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.adamgeraghty.app"
+        applicationId = "com.adamgeraghty.scorecard"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
@@ -55,13 +55,13 @@ android {
         }
     }
 
-    namespace = "com.adamgeraghty.app"
+    namespace = "com.adamgeraghty.scorecard"
 }
 
 sqldelight {
     databases {
         create("Database") {
-            packageName.set(" com.adamgeraghty.app.db")
+            packageName.set(" com.adamgeraghty.scorecard.db")
         }
     }
 }

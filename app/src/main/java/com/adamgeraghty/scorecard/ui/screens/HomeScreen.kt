@@ -1,4 +1,4 @@
-package com.adamgeraghty.app.ui.screens
+package com.adamgeraghty.scorecard.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +10,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -23,4 +25,10 @@ fun HomeScreen(navController: NavController) {
     ) {
         Text(text = "Big ol test")
     }
+}
+
+@Preview
+@Composable
+fun HomeScreen_Preview() {
+    HomeScreen(navController = rememberNavController())
 }

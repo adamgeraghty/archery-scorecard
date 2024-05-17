@@ -1,4 +1,4 @@
-package com.adamgeraghty.app.di
+package com.adamgeraghty.scorecard.di
 
 import dagger.Module
 import dagger.hilt.InstallIn

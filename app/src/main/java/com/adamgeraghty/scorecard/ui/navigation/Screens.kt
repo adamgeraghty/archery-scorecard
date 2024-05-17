@@ -1,4 +1,4 @@
-package com.adamgeraghty.app.ui.navigation
+package com.adamgeraghty.scorecard.ui.navigation
 
 sealed class Screens(val route: String) {
 

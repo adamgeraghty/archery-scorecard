@@ -1,4 +1,4 @@
-package com.adamgeraghty.app.theme
+package com.adamgeraghty.scorecard.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

@@ -1,4 +1,4 @@
-package com.adamgeraghty.app.theme
+package com.adamgeraghty.scorecard.theme
 
 import android.annotation.TargetApi
 import android.os.Build

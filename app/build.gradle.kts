@@ -6,6 +6,7 @@ plugins {
     id("com.squareup.sort-dependencies")
     id("kotlin-android")
     id("org.jmailen.kotlinter")
+    id("app.cash.sqldelight")
 }
 
 android {
@@ -57,6 +58,14 @@ android {
     namespace = "com.adamgeraghty.app"
 }
 
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set(" com.adamgeraghty.app.db")
+        }
+    }
+}
+
 dependencies {
     ksp(libs.hilt.compiler)
     ksp(libs.square.moshi.kotlin.codegen)
@@ -83,7 +92,8 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)
 //    debugImplementation(libs.square.leakcanary)
-
+    implementation(libs.sqldelight.driver)
+    implementation(libs.sqldelight.coroutines)
 
     testImplementation(libs.junit)
 

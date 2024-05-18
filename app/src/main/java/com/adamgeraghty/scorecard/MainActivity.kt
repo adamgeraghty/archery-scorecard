@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     ScorecardNavGraph(
                         navController,
-                        Screens.HomeScreen.route
+                        Screens.HomeScreen.route,
                     )
                 }
             }
@@ -49,4 +49,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

@@ -29,19 +29,20 @@ fun ScorecardNavGraph(
 
 private const val NAV_DURATION = 300
 
-private fun exitTransition() = slideOutHorizontally(
-    targetOffsetX = { -NAV_DURATION },
-    animationSpec = tween(
-        durationMillis = NAV_DURATION,
-        easing = FastOutSlowInEasing,
-    ),
-) + fadeOut(animationSpec = tween(NAV_DURATION))
+private fun exitTransition() =
+    slideOutHorizontally(
+        targetOffsetX = { -NAV_DURATION },
+        animationSpec = tween(
+            durationMillis = NAV_DURATION,
+            easing = FastOutSlowInEasing,
+        ),
+    ) + fadeOut(animationSpec = tween(NAV_DURATION))
 
-private fun popEnterTransition() = slideInHorizontally(
-    initialOffsetX = { -NAV_DURATION },
-    animationSpec = tween(
-        durationMillis = NAV_DURATION,
-        easing= FastOutSlowInEasing
+private fun popEnterTransition() =
+    slideInHorizontally(
+        initialOffsetX = { -NAV_DURATION },
+        animationSpec = tween(
+            durationMillis = NAV_DURATION,
+            easing = FastOutSlowInEasing,
+        ),
     )
-)
-

@@ -1,5 +1,7 @@
-package com.adamgeraghty.scorecard.db
+package com.adamgeraghty.scorecard.cache
 
+import com.adamgeraghty.scorecard.db.Database
+import com.adamgeraghty.scorecard.db.ScorecardDBQueries
 import com.adamgeraghty.scorecard.utils.SqlConverter.toDataList
 import javax.inject.Inject
 

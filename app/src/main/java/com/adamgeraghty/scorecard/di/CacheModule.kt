@@ -1,11 +1,11 @@
 package com.adamgeraghty.scorecard.di
 
 import com.adamgeraghty.scorecard.ScorecardApp
+import com.adamgeraghty.scorecard.cache.DriverFactory
+import com.adamgeraghty.scorecard.cache.ScorecardCache
+import com.adamgeraghty.scorecard.cache.ScorecardCacheImpl
+import com.adamgeraghty.scorecard.cache.ScorecardDatabaseFactory
 import com.adamgeraghty.scorecard.db.Database
-import com.adamgeraghty.scorecard.db.DriverFactory
-import com.adamgeraghty.scorecard.db.ScorecardCache
-import com.adamgeraghty.scorecard.db.ScorecardCacheImpl
-import com.adamgeraghty.scorecard.db.ScorecardDatabaseFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

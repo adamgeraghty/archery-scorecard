@@ -1,6 +1,6 @@
 package com.adamgeraghty.scorecard.utils
 
-import com.adamgeraghty.scorecard.db.DataList
+import com.adamgeraghty.scorecard.cache.DataList
 import com.adamgeraghty.scorecard.db.Data_Entity
 
 object SqlConverter {

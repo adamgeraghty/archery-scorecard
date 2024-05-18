@@ -1,4 +1,4 @@
-package com.adamgeraghty.scorecard.db
+package com.adamgeraghty.scorecard.cache
 
 interface ScorecardCache {
     fun insertData(data: DataList)

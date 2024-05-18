@@ -1,7 +1,9 @@
 plugins {
     id("app.cash.paparazzi")
     id("com.android.application")
-    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
+//    id("com.google.dagger.hilt.android") // known issue, ksp generated files result in error.NonExistentClass. use kapt instead for now
+    id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
     id("com.squareup.sort-dependencies")
     id("kotlin-android")
@@ -61,45 +63,48 @@ android {
 sqldelight {
     databases {
         create("Database") {
-            packageName.set(" com.adamgeraghty.scorecard.db")
+            packageName.set("com.adamgeraghty.scorecard.db")
         }
     }
 }
 
 dependencies {
-    ksp(libs.hilt.compiler)
-    ksp(libs.square.moshi.kotlin.codegen)
+ksp(libs.square.moshi.kotlin.codegen)
 
-    kspAndroidTest(libs.hilt.android.compiler)
+kspAndroidTest(libs.hilt.android.compiler)
 
-    implementation(platform(libs.compose.bom))
-    implementation(libs.android.material)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.compose.material)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling)
-    implementation(libs.hilt.android)
-    implementation(libs.square.moshi.kotlin)
-    implementation(libs.square.retrofit)
-    implementation(libs.square.retrofit.converter.moshi)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.jakewharton.timber)
-
-    debugImplementation(platform(libs.compose.bom))
-    debugImplementation(libs.compose.ui.test.manifest)
-    debugImplementation(libs.compose.ui.tooling)
+implementation(platform(libs.compose.bom))
+implementation(libs.android.material)
+implementation(libs.androidx.activity.compose)
+implementation(libs.androidx.appcompat)
+implementation(libs.androidx.core.ktx)
+implementation(libs.androidx.lifecycle.runtime.ktx)
+implementation(libs.androidx.navigation.compose)
+implementation(libs.compose.material)
+implementation(libs.compose.ui)
+implementation(libs.compose.ui.tooling)
+implementation(libs.hilt.android)
+implementation(libs.jakewharton.timber)
+implementation(libs.sqldelight.coroutines)
 //    debugImplementation(libs.square.leakcanary)
-    implementation(libs.sqldelight.driver)
-    implementation(libs.sqldelight.coroutines)
+implementation(libs.sqldelight.driver)
+implementation(libs.sqldelight.runtime)
+implementation(libs.square.moshi.kotlin)
+implementation(libs.square.retrofit)
+implementation(libs.square.retrofit.converter.moshi)
 
-    testImplementation(libs.junit)
+debugImplementation(platform(libs.compose.bom))
+debugImplementation(libs.compose.ui.test.manifest)
+debugImplementation(libs.compose.ui.tooling)
 
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.test.junit)
-    androidTestImplementation(libs.compose.ui.test.junit)
-    androidTestImplementation(libs.hilt.android.testing)
+//    ksp(libs.hilt.compiler) // known issue, ksp generated files result in error.NonExistentClass. use kapt instead for now
+kapt(libs.hilt.compiler)
+
+testImplementation(libs.junit)
+
+androidTestImplementation(platform(libs.compose.bom))
+androidTestImplementation(libs.androidx.test.espresso.core)
+androidTestImplementation(libs.androidx.test.junit)
+androidTestImplementation(libs.compose.ui.test.junit)
+androidTestImplementation(libs.hilt.android.testing)
 }

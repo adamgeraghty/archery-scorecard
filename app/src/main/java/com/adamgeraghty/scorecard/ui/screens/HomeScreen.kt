@@ -7,12 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.adamgeraghty.scorecard.ui.components.CollapsibleLazyColumn
+import com.adamgeraghty.scorecard.ui.components.CollapsibleSection
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -23,7 +24,22 @@ fun HomeScreen(navController: NavController) {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Top,
     ) {
-        Text(text = "Big ol test")
+        CollapsibleLazyColumn(
+            sections = listOf(
+                CollapsibleSection(
+                    title = "Fruits A",
+                    rows = listOf("Apple", "Apricots", "Avocado"),
+                ),
+                CollapsibleSection(
+                    title = "Fruits B",
+                    rows = listOf("Banana", "Blackberries", "Blueberries"),
+                ),
+                CollapsibleSection(
+                    title = "Fruits C",
+                    rows = listOf("Cherimoya", "Cantaloupe", "Cherries", "Clementine"),
+                ),
+            ),
+        )
     }
 }
 

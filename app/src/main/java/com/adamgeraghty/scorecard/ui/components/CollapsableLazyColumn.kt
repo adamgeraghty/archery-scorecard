@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 fun CollapsibleLazyColumn(
     sections: List<CollapsibleSection>,
     modifier: Modifier = Modifier,
+    onRowClick: (String) -> Unit,
 ) {
     Column(modifier) {
         sections.forEach { section ->
@@ -34,7 +35,11 @@ fun CollapsibleLazyColumn(
                 onClick = { collapsed = !collapsed },
             )
 
-            CollapsibleSectionContent(section = section, collapsed = collapsed)
+            CollapsibleSectionContent(
+                section = section,
+                collapsed = collapsed,
+                onRowClick = onRowClick,
+            )
         }
     }
 }
@@ -74,6 +79,7 @@ private fun CollapsibleIcon(collapsed: Boolean) {
 fun CollapsibleSectionContent(
     section: CollapsibleSection,
     collapsed: Boolean,
+    onRowClick: (String) -> Unit,
 ) {
     AnimatedVisibility(
         visible = !collapsed,
@@ -88,7 +94,8 @@ fun CollapsibleSectionContent(
                     modifier = Modifier
                         .padding(start = 40.dp)
                         .fillMaxWidth()
-                        .padding(vertical = 10.dp),
+                        .padding(vertical = 10.dp)
+                        .clickable { onRowClick(row) },
                 ) {
                     Text(
                         text = row,

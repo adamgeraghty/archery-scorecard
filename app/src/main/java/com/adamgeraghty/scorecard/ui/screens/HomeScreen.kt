@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.adamgeraghty.scorecard.ui.components.CollapsibleLazyColumn
 import com.adamgeraghty.scorecard.ui.components.CollapsibleSection
+import timber.log.Timber
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -39,6 +40,9 @@ fun HomeScreen(navController: NavController) {
                     rows = listOf("Cherimoya", "Cantaloupe", "Cherries", "Clementine"),
                 ),
             ),
+            onRowClick = {
+                Timber.d("Clicked $it")
+            },
         )
     }
 }

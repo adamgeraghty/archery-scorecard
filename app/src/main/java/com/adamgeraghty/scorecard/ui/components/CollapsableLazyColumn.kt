@@ -26,42 +26,48 @@ fun CollapsibleLazyColumn(
 ) {
     Column(modifier) {
         sections.forEach { section ->
-            var collapsed by remember { mutableStateOf(section.collapsed) }
+            var collapsed by remember { mutableStateOf(true) }
 
-            CollapsibleSectionHeader(section.title, collapsed) {
-                collapsed = !collapsed
-                section.collapsed = collapsed
-            }
+            CollapsibleSectionHeader(
+                title = section.title,
+                collapsed = collapsed,
+                onClick = { collapsed = !collapsed },
+            )
 
-            CollapsibleSectionContent(section, collapsed)
+            CollapsibleSectionContent(section = section, collapsed = collapsed)
         }
     }
 }
 
 @Composable
 fun CollapsibleSectionHeader(
+    modifier: Modifier = Modifier,
     title: String,
     collapsed: Boolean,
     onClick: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clickable { onClick() }
-            .fillMaxWidth(),
+        modifier = modifier.clickable { onClick() }.fillMaxWidth(),
     ) {
-        Icon(
-            imageVector = if (collapsed) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp,
-            contentDescription = "Collapse/Expand",
-            tint = Color.LightGray,
-            modifier = Modifier.padding(8.dp),
-        )
+        CollapsibleIcon(collapsed)
         Text(
             text = title,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 8.dp),
         )
     }
+}
+
+@Composable
+private fun CollapsibleIcon(collapsed: Boolean) {
+    val icon = if (collapsed) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp
+    Icon(
+        imageVector = icon,
+        contentDescription = "Collapse/Expand",
+        tint = Color.LightGray,
+        modifier = Modifier.padding(8.dp),
+    )
 }
 
 @Composable
@@ -95,4 +101,4 @@ fun CollapsibleSectionContent(
     }
 }
 
-data class CollapsibleSection(val title: String, val rows: List<String>, var collapsed: Boolean = true)
+data class CollapsibleSection(val title: String, val rows: List<String>)

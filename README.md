@@ -1,3 +1,9 @@
+# Archery Scorecard
+
+This was created to allow me to keep track of scores during Archery rounds. The core idea was to have a visual interface that would allow a use to tap where they landed a shot, rather than just entering a number. Eventually data will be stored locally, current focus is on getting a usable UI 
+
+This project was initialized from an app template, details of which can be found below:
+
 # Android App Template
 
 This is a GitHub template repository intended to kickstart development on an Android application. This project comes set with a handful of tools that [Adam](https://github.com/AdamMc331) finds important and relevant to every project. If you think something is missing, or feel strongly that a setup should be changed, please submit an [Issue](https://github.com/AdamMc331/AndroidAppTemplate/issues/new).

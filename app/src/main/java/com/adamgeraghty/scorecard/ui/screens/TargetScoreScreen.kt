@@ -3,13 +3,25 @@ package com.adamgeraghty.scorecard.ui.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -67,7 +79,7 @@ fun archeryReducer(
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MagicNumber")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TargetScoreScreen(navController: NavController) {
@@ -109,39 +121,39 @@ fun TargetScoreScreen(navController: NavController) {
                         Canvas(
                             modifier = Modifier.fillMaxSize(),
                         ) {
-                            // Save the center of the target. kinda stinks as its saved every recomposition, also wont work when supporting
-                            // multiple targets
+                            // Save the center of the target. kinda stinks as its saved every recomposition, also wont
+                            // work when supporting multiple targets
                             dispatch(ArcheryAction.UpdateCenter(size.center))
 
-                            // Note: Required as recomposition was stopping after a few seconds, thus stopping canvas draw updates.
-                            // Using this I can trigger recomposition again only when new shots are added
+                            // Note: Required as recomposition was stopping after a few seconds, thus stopping canvas
+                            // draw updates. Using this I can trigger recomposition again only when new shots are added
                             state.shotCount.let {
                                 drawCircle(
                                     color = Color.Black,
-                                    radius = state.targetSize * 0.8f,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD,
                                     center = size.center,
                                 )
 
                                 drawCircle(
                                     color = Color.Blue,
-                                    radius = state.targetSize * 0.6f,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED,
                                     center = size.center,
                                 )
 
                                 drawCircle(
                                     color = Color.Red,
-                                    radius = state.targetSize * 0.4f,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE,
                                     center = size.center,
                                 )
 
                                 drawCircle(
                                     color = Color.Yellow,
-                                    radius = state.targetSize * 0.2f,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK,
                                     center = size.center,
                                 )
 
                                 state.shots.forEach { shot ->
-                                    drawCircle(Color.Green, 10f, shot)
+                                    drawCircle(Color.Green, TargetConstants.SHOT_RADIUS, shot)
                                 }
                             }
                         }
@@ -168,15 +180,29 @@ fun calculateScore(
     val centerX = center.x
     val centerY = center.y
 
-    val distance = Math.sqrt(((shot.x - centerX) * (shot.x - centerX) + (shot.y - centerY) * (shot.y - centerY)).toDouble())
+    val distance = Math.sqrt(
+        ((shot.x - centerX) * (shot.x - centerX) + (shot.y - centerY) * (shot.y - centerY)).toDouble(),
+    )
 
     return when {
-        distance <= targetSize * 0.2f -> 10
-        distance <= targetSize * 0.4f -> 8
-        distance <= targetSize * 0.6f -> 6
-        distance <= targetSize * 0.8f -> 4
+        distance <= targetSize * TargetConstants.TARGET_SIZE_GOLD -> TargetConstants.TARGET_SCORE_GOLD
+        distance <= targetSize * TargetConstants.TARGET_SIZE_RED -> TargetConstants.TARGET_SCORE_RED
+        distance <= targetSize * TargetConstants.TARGET_SIZE_BLUE -> TargetConstants.TARGET_SCORE_BLUE
+        distance <= targetSize * TargetConstants.TARGET_SIZE_BLACK -> TargetConstants.TARGET_SCORE_BLACK
         else -> 0
     }
+}
+
+object TargetConstants {
+    const val TARGET_SIZE_GOLD = 0.2f
+    const val TARGET_SIZE_RED = 0.4f
+    const val TARGET_SIZE_BLUE = 0.6f
+    const val TARGET_SIZE_BLACK = 0.8f
+    const val TARGET_SCORE_GOLD = 10
+    const val TARGET_SCORE_RED = 8
+    const val TARGET_SCORE_BLUE = 6
+    const val TARGET_SCORE_BLACK = 4
+    const val SHOT_RADIUS = 10f
 }
 
 // Helper function to create a Redux-like store

@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.adamgeraghty.scorecard.ui.screens.CreateScorecardScreen
 import com.adamgeraghty.scorecard.ui.screens.HomeScreen
+import com.adamgeraghty.scorecard.ui.screens.TargetScoreScreen
 
 @Composable
 fun ScorecardNavGraph(
@@ -23,6 +25,22 @@ fun ScorecardNavGraph(
             popEnterTransition = { popEnterTransition() },
         ) {
             HomeScreen(navController = navController)
+        }
+
+        composable(
+            route = Screens.CreateScorecardScreen.route,
+            exitTransition = { exitTransition() },
+            popEnterTransition = { popEnterTransition() },
+        ) {
+            CreateScorecardScreen(navController = navController)
+        }
+
+        composable(
+            route = Screens.TargetScoreScreen.route,
+            exitTransition = { exitTransition() },
+            popEnterTransition = { popEnterTransition() },
+        ) {
+            TargetScoreScreen(navController = navController)
         }
     }
 }

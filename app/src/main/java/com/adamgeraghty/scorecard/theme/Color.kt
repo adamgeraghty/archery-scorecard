@@ -1,6 +1,6 @@
 @file:Suppress("MagicNumber")
 
-package com.adamgeraghty.app.theme
+package com.adamgeraghty.scorecard.theme
 
 import androidx.compose.ui.graphics.Color
 

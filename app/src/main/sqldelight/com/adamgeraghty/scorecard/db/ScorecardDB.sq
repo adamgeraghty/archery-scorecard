@@ -1,0 +1,17 @@
+CREATE TABLE Data_Entity (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+insertData:
+INSERT OR REPLACE
+INTO Data_Entity(
+    id,
+    name
+) VALUES (?, ?);
+
+getData:
+SELECT * FROM Data_Entity;
+
+deleteData:
+DELETE FROM Data_Entity;

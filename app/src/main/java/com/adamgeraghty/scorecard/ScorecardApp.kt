@@ -1,4 +1,4 @@
-package com.adamgeraghty.app
+package com.adamgeraghty.scorecard
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

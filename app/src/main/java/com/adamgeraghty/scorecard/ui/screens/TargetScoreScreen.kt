@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -128,28 +129,112 @@ fun TargetScoreScreen(navController: NavController) {
                             // Note: Required as recomposition was stopping after a few seconds, thus stopping canvas
                             // draw updates. Using this I can trigger recomposition again only when new shots are added
                             state.shotCount.let {
+                                // Target colors
+                                drawCircle(
+                                    color = Color.White,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_1,
+                                    center = size.center,
+                                )
+                                drawCircle(
+                                    color = Color.White,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_2,
+                                    center = size.center,
+                                )
                                 drawCircle(
                                     color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_3,
                                     center = size.center,
                                 )
-
+                                drawCircle(
+                                    color = Color.Black,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_4,
+                                    center = size.center,
+                                )
                                 drawCircle(
                                     color = Color.Blue,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_5,
                                     center = size.center,
                                 )
-
+                                drawCircle(
+                                    color = Color.Blue,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_6,
+                                    center = size.center,
+                                )
                                 drawCircle(
                                     color = Color.Red,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_7,
+                                    center = size.center,
+                                )
+                                drawCircle(
+                                    color = Color.Red,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_8,
+                                    center = size.center,
+                                )
+                                drawCircle(
+                                    color = Color.Yellow,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_9,
+                                    center = size.center,
+                                )
+                                drawCircle(
+                                    color = Color.Yellow,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_10,
                                     center = size.center,
                                 )
 
+                                // Border rings
                                 drawCircle(
-                                    color = Color.Yellow,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK,
+                                    color = Color.Black,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_1,
                                     center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
+                                )
+                                drawCircle(
+                                    color = Color.Black,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_2,
+                                    center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
+                                )
+                                drawCircle(
+                                    color = Color.White,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_4,
+                                    center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
+                                )
+                                drawCircle(
+                                    color = Color.White,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_5,
+                                    center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
+                                )
+                                drawCircle(
+                                    color = Color.Black,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_6,
+                                    center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
+                                )
+                                drawCircle(
+                                    color = Color.Black,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_7,
+                                    center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
+                                )
+                                drawCircle(
+                                    color = Color.Black,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_8,
+                                    center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
+                                )
+                                drawCircle(
+                                    color = Color.Black,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_9,
+                                    center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
+                                )
+                                drawCircle(
+                                    color = Color.Black,
+                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_10,
+                                    center = size.center,
+                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
                                 )
 
                                 state.shots.forEach { shot ->
@@ -185,24 +270,43 @@ fun calculateScore(
     )
 
     return when {
-        distance <= targetSize * TargetConstants.TARGET_SIZE_GOLD -> TargetConstants.TARGET_SCORE_GOLD
-        distance <= targetSize * TargetConstants.TARGET_SIZE_RED -> TargetConstants.TARGET_SCORE_RED
-        distance <= targetSize * TargetConstants.TARGET_SIZE_BLUE -> TargetConstants.TARGET_SCORE_BLUE
-        distance <= targetSize * TargetConstants.TARGET_SIZE_BLACK -> TargetConstants.TARGET_SCORE_BLACK
+        distance <= targetSize * TargetConstants.TARGET_SIZE_GOLD_10 -> TargetConstants.TARGET_SCORE_GOLD_10
+        distance <= targetSize * TargetConstants.TARGET_SIZE_RED_7 -> TargetConstants.TARGET_SCORE_GOLD_9
+        distance <= targetSize * TargetConstants.TARGET_SIZE_RED_8 -> TargetConstants.TARGET_SCORE_RED_8
+        distance <= targetSize * TargetConstants.TARGET_SIZE_RED_7 -> TargetConstants.TARGET_SCORE_RED_7
+        distance <= targetSize * TargetConstants.TARGET_SIZE_BLUE_6 -> TargetConstants.TARGET_SCORE_BLUE_6
+        distance <= targetSize * TargetConstants.TARGET_SIZE_BLUE_5 -> TargetConstants.TARGET_SCORE_BLUE_5
+        distance <= targetSize * TargetConstants.TARGET_SIZE_BLACK_4 -> TargetConstants.TARGET_SCORE_BLACK_4
+        distance <= targetSize * TargetConstants.TARGET_SIZE_BLACK_3 -> TargetConstants.TARGET_SCORE_BLACK_3
+        distance <= targetSize * TargetConstants.TARGET_SIZE_WHITE_2 -> TargetConstants.TARGET_SCORE_WHITE_2
+        distance <= targetSize * TargetConstants.TARGET_SIZE_WHITE_1 -> TargetConstants.TARGET_SCORE_WHITE_1
         else -> 0
     }
 }
 
 object TargetConstants {
-    const val TARGET_SIZE_GOLD = 0.2f
-    const val TARGET_SIZE_RED = 0.4f
-    const val TARGET_SIZE_BLUE = 0.6f
-    const val TARGET_SIZE_BLACK = 0.8f
-    const val TARGET_SCORE_GOLD = 10
-    const val TARGET_SCORE_RED = 8
-    const val TARGET_SCORE_BLUE = 6
-    const val TARGET_SCORE_BLACK = 4
+    const val TARGET_SIZE_GOLD_10 = 0.1f
+    const val TARGET_SIZE_GOLD_9 = 0.2f
+    const val TARGET_SIZE_RED_8 = 0.3f
+    const val TARGET_SIZE_RED_7 = 0.4f
+    const val TARGET_SIZE_BLUE_6 = 0.5f
+    const val TARGET_SIZE_BLUE_5 = 0.6f
+    const val TARGET_SIZE_BLACK_4 = 0.7f
+    const val TARGET_SIZE_BLACK_3 = 0.8f
+    const val TARGET_SIZE_WHITE_2 = 0.9f
+    const val TARGET_SIZE_WHITE_1 = 1f
+    const val TARGET_SCORE_GOLD_10 = 10
+    const val TARGET_SCORE_GOLD_9 = 9
+    const val TARGET_SCORE_RED_8 = 8
+    const val TARGET_SCORE_RED_7 = 7
+    const val TARGET_SCORE_BLUE_6 = 6
+    const val TARGET_SCORE_BLUE_5 = 5
+    const val TARGET_SCORE_BLACK_4 = 4
+    const val TARGET_SCORE_BLACK_3 = 3
+    const val TARGET_SCORE_WHITE_2 = 2
+    const val TARGET_SCORE_WHITE_1 = 1
     const val SHOT_RADIUS = 10f
+    const val TARGET_BORDER = 3f
 }
 
 // Helper function to create a Redux-like store

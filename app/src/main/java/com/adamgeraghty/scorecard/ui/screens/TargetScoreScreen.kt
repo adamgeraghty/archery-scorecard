@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -41,6 +45,8 @@ sealed class ArcheryAction {
     data class UpdateCenter(val center: Offset) : ArcheryAction()
 
     data object Reset : ArcheryAction()
+
+    data object Undo : ArcheryAction()
 }
 
 data class ArcheryState(
@@ -70,6 +76,20 @@ fun archeryReducer(
                 targetCenterOffset = action.center,
             )
         }
+        is ArcheryAction.Undo -> {
+            if (state.shots.isNotEmpty()) {
+                val newScore = state.score - calculateScore(state.shots.last(), state.targetCenterOffset, state.targetSize)
+                var newShotCount = state.shotCount
+                newShotCount -= 1
+                state.copy(
+                    score = newScore,
+                    shotCount = newShotCount,
+                    shots = state.shots.dropLast(1),
+                )
+            } else {
+                state // Not happy with this, revisit
+            }
+        }
         ArcheryAction.Reset -> {
             state.copy(
                 score = 0,
@@ -80,7 +100,7 @@ fun archeryReducer(
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "MagicNumber")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TargetScoreScreen(navController: NavController) {
@@ -90,7 +110,16 @@ fun TargetScoreScreen(navController: NavController) {
     )
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Archery Score") }) },
+        topBar = {
+            TopAppBar(
+                title = { Text("Archery Score") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+            )
+        },
         content = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -245,11 +274,19 @@ fun TargetScoreScreen(navController: NavController) {
                     }
                 }
 
-                Button(
-                    onClick = { dispatch(ArcheryAction.Reset) },
-                    modifier = Modifier.padding(16.dp),
-                ) {
-                    Text("Reset")
+                Row {
+                    Button(
+                        onClick = { dispatch(ArcheryAction.Reset) },
+                        modifier = Modifier.padding(16.dp),
+                    ) {
+                        Text("Reset")
+                    }
+                    Button(
+                        onClick = { dispatch(ArcheryAction.Undo) },
+                        modifier = Modifier.padding(16.dp),
+                    ) {
+                        Text("Undo")
+                    }
                 }
             }
         },

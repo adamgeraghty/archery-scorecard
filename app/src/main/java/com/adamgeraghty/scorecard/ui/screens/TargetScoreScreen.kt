@@ -78,7 +78,8 @@ fun archeryReducer(
         }
         is ArcheryAction.Undo -> {
             if (state.shots.isNotEmpty()) {
-                val newScore = state.score - calculateScore(state.shots.last(), state.targetCenterOffset, state.targetSize)
+                val newScore = state.score -
+                    calculateScore(state.shots.last(), state.targetCenterOffset, state.targetSize)
                 var newShotCount = state.shotCount
                 newShotCount -= 1
                 state.copy(

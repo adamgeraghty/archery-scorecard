@@ -39,17 +39,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
-sealed class ArcheryAction {
-    data class Shoot(val shot: Offset) : ArcheryAction()
+sealed class TargetAction {
+    data class Shoot(val shot: Offset) : TargetAction()
 
-    data class UpdateCenter(val center: Offset) : ArcheryAction()
+    data class UpdateCenter(val center: Offset) : TargetAction()
 
-    data object Reset : ArcheryAction()
+    data object Reset : TargetAction()
 
-    data object Undo : ArcheryAction()
+    data object Undo : TargetAction()
 }
 
-data class ArcheryState(
+data class TargetState(
     val score: Int = 0,
     val targetSize: Float = 500f,
     val shotCount: Int = 0,
@@ -58,12 +58,12 @@ data class ArcheryState(
     val invalidations: Int = 0,
 )
 
-fun archeryReducer(
-    state: ArcheryState,
-    action: ArcheryAction,
-): ArcheryState {
+fun targetReducer(
+    state: TargetState,
+    action: TargetAction,
+): TargetState {
     return when (action) {
-        is ArcheryAction.Shoot -> {
+        is TargetAction.Shoot -> {
             val newScore = state.score + calculateScore(action.shot, state.targetCenterOffset, state.targetSize)
             state.copy(
                 score = newScore,
@@ -71,12 +71,12 @@ fun archeryReducer(
                 shots = state.shots + action.shot,
             )
         }
-        is ArcheryAction.UpdateCenter -> {
+        is TargetAction.UpdateCenter -> {
             state.copy(
                 targetCenterOffset = action.center,
             )
         }
-        is ArcheryAction.Undo -> {
+        is TargetAction.Undo -> {
             if (state.shots.isNotEmpty()) {
                 val newScore = state.score -
                     calculateScore(state.shots.last(), state.targetCenterOffset, state.targetSize)
@@ -91,7 +91,7 @@ fun archeryReducer(
                 state // Not happy with this, revisit
             }
         }
-        ArcheryAction.Reset -> {
+        TargetAction.Reset -> {
             state.copy(
                 score = 0,
                 shotCount = 0,
@@ -106,14 +106,14 @@ fun archeryReducer(
 @Composable
 fun TargetScoreScreen(navController: NavController) {
     val (state, dispatch) = rememberReducer(
-        initialState = ArcheryState(),
-        reducer = ::archeryReducer,
+        initialState = TargetState(),
+        reducer = ::targetReducer,
     )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Archery Score") },
+                title = { Text("Score") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -145,7 +145,7 @@ fun TargetScoreScreen(navController: NavController) {
                             .size(state.targetSize.dp)
                             .pointerInput(Unit) {
                                 detectTapGestures { offset ->
-                                    dispatch(ArcheryAction.Shoot(offset))
+                                    dispatch(TargetAction.Shoot(offset))
                                 }
                             },
                     ) {
@@ -154,7 +154,7 @@ fun TargetScoreScreen(navController: NavController) {
                         ) {
                             // Save the center of the target. kinda stinks as its saved every recomposition, also wont
                             // work when supporting multiple targets
-                            dispatch(ArcheryAction.UpdateCenter(size.center))
+                            dispatch(TargetAction.UpdateCenter(size.center))
 
                             // Note: Required as recomposition was stopping after a few seconds, thus stopping canvas
                             // draw updates. Using this I can trigger recomposition again only when new shots are added
@@ -277,13 +277,13 @@ fun TargetScoreScreen(navController: NavController) {
 
                 Row {
                     Button(
-                        onClick = { dispatch(ArcheryAction.Reset) },
+                        onClick = { dispatch(TargetAction.Reset) },
                         modifier = Modifier.padding(16.dp),
                     ) {
                         Text("Reset")
                     }
                     Button(
-                        onClick = { dispatch(ArcheryAction.Undo) },
+                        onClick = { dispatch(TargetAction.Undo) },
                         modifier = Modifier.padding(16.dp),
                     ) {
                         Text("Undo")

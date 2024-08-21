@@ -88,15 +88,18 @@ fun targetReducer(
                     shots = state.shots.dropLast(1),
                 )
             } else {
-                state // Not happy with this, revisit
+                state
             }
         }
-        TargetAction.Reset -> {
+        is TargetAction.Reset -> {
             state.copy(
                 score = 0,
                 shotCount = 0,
                 shots = emptyList(),
             )
+        }
+        else -> {
+            state
         }
     }
 }

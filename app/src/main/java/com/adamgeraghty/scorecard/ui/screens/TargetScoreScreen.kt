@@ -2,7 +2,7 @@ package com.adamgeraghty.scorecard.ui.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,13 +36,18 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 sealed class TargetAction {
-    data class Shoot(val shot: Offset) : TargetAction()
+    data object Shoot : TargetAction()
 
     data class UpdateCenter(val center: Offset) : TargetAction()
+
+    data class ShowZoomedWindow(val showZoomedWindow: Boolean, val touchOffset: Offset) : TargetAction()
+
+    data class MoveZoomedWindow(val moveAmount: Offset) : TargetAction()
 
     data object Reset : TargetAction()
 
@@ -55,6 +60,9 @@ data class TargetState(
     val shotCount: Int = 0,
     val shots: List<Offset> = emptyList(),
     val targetCenterOffset: Offset = Offset(0f, 0f),
+    val showZoomedWindow: Boolean = false,
+    val touchOffset: Offset = Offset(0f, 0f),
+    val zoomOffset: Offset = Offset(0f, 0f),
     val invalidations: Int = 0,
 )
 
@@ -64,18 +72,38 @@ fun targetReducer(
 ): TargetState {
     return when (action) {
         is TargetAction.Shoot -> {
-            val newScore = state.score + calculateScore(action.shot, state.targetCenterOffset, state.targetSize)
+            val newScore = state.score + calculateScore(state.touchOffset, state.targetCenterOffset, state.targetSize)
             state.copy(
                 score = newScore,
                 shotCount = state.shotCount + 1,
-                shots = state.shots + action.shot,
+                shots = state.shots + state.touchOffset,
+                showZoomedWindow = false,
             )
         }
+
         is TargetAction.UpdateCenter -> {
             state.copy(
                 targetCenterOffset = action.center,
             )
         }
+
+        is TargetAction.ShowZoomedWindow -> {
+            state.copy(
+                showZoomedWindow = action.showZoomedWindow,
+                zoomOffset = Offset(action.touchOffset.x, action.touchOffset.y - 500f),
+                touchOffset = Offset(action.touchOffset.x, action.touchOffset.y),
+            )
+        }
+
+        is TargetAction.MoveZoomedWindow -> {
+            var offset = state.touchOffset
+            offset += action.moveAmount
+            state.copy(
+                zoomOffset = offset.copy(y = offset.y - 500f),
+                touchOffset = offset,
+            )
+        }
+
         is TargetAction.Undo -> {
             if (state.shots.isNotEmpty()) {
                 val newScore = state.score -
@@ -91,13 +119,16 @@ fun targetReducer(
                 state
             }
         }
+
         is TargetAction.Reset -> {
             state.copy(
                 score = 0,
                 shotCount = 0,
                 shots = emptyList(),
+                showZoomedWindow = false,
             )
         }
+
         else -> {
             state
         }
@@ -143,135 +174,36 @@ fun TargetScoreScreen(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(16.dp),
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(state.targetSize.dp)
-                            .pointerInput(Unit) {
-                                detectTapGestures { offset ->
-                                    dispatch(TargetAction.Shoot(offset))
-                                }
-                            },
-                    ) {
-                        Canvas(
-                            modifier = Modifier.fillMaxSize(),
+                    Column {
+                        Box(
+                            modifier = Modifier
+                                .size(state.targetSize.dp)
+                                .pointerInput(Unit) {
+                                    detectDragGestures(
+                                        onDragStart = { offset ->
+                                            dispatch(TargetAction.ShowZoomedWindow(true, offset))
+                                        },
+                                        onDragEnd = {
+                                            dispatch(TargetAction.Shoot)
+                                        },
+                                        onDrag = { change, dragAmount ->
+                                            dispatch(TargetAction.MoveZoomedWindow(dragAmount))
+                                        },
+                                    )
+                                },
                         ) {
-                            // Save the center of the target. kinda stinks as its saved every recomposition, also wont
-                            // work when supporting multiple targets
-                            dispatch(TargetAction.UpdateCenter(size.center))
-
-                            // Note: Required as recomposition was stopping after a few seconds, thus stopping canvas
-                            // draw updates. Using this I can trigger recomposition again only when new shots are added
-                            state.shotCount.let {
-                                // Target colors
-                                drawCircle(
-                                    color = Color.White,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_1,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.White,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_2,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_3,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_4,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.Blue,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_5,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.Blue,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_6,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.Red,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_7,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.Red,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_8,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.Yellow,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_9,
-                                    center = size.center,
-                                )
-                                drawCircle(
-                                    color = Color.Yellow,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_10,
-                                    center = size.center,
-                                )
-
-                                // Border rings
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_1,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_2,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-                                drawCircle(
-                                    color = Color.White,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_4,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-                                drawCircle(
-                                    color = Color.White,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_5,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_6,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_7,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_8,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_9,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-                                drawCircle(
-                                    color = Color.Black,
-                                    radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_10,
-                                    center = size.center,
-                                    style = Stroke(width = TargetConstants.TARGET_BORDER),
-                                )
-
-                                state.shots.forEach { shot ->
-                                    drawCircle(Color.Green, TargetConstants.SHOT_RADIUS, shot)
+                            TargetCanvas(state = state, dispatch = dispatch)
+                            if (state.showZoomedWindow) {
+                                Canvas(
+                                    modifier = Modifier
+                                        .fillMaxSize() // .clipToBounds()
+                                        .zIndex(2f),
+                                ) {
+                                    drawCircle(
+                                        color = Color.Cyan,
+                                        radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_6,
+                                        center = state.zoomOffset,
+                                    )
                                 }
                             }
                         }
@@ -295,6 +227,138 @@ fun TargetScoreScreen(navController: NavController) {
             }
         },
     )
+}
+
+@Composable
+fun TargetCanvas(
+    state: TargetState,
+    dispatch: (TargetAction) -> Unit,
+) {
+    Canvas(
+        modifier = Modifier
+            .fillMaxSize()
+            .zIndex(1f),
+    ) {
+        // Save the center of the target. kinda stinks as its saved every recomposition, also wont
+        // work when supporting multiple targets
+        dispatch(TargetAction.UpdateCenter(size.center))
+
+        // Note: Required as recomposition was stopping after a few seconds, thus stopping canvas
+        // draw updates. Using this I can trigger recomposition again only when new shots are added
+        state.shotCount.let {
+            // Target colors
+            drawCircle(
+                color = Color.White,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_1,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.White,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_2,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_3,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_4,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.Blue,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_5,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.Blue,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_6,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.Red,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_7,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.Red,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_8,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.Yellow,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_9,
+                center = size.center,
+            )
+            drawCircle(
+                color = Color.Yellow,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_10,
+                center = size.center,
+            )
+
+            // Border rings
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_1,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_WHITE_2,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+            drawCircle(
+                color = Color.White,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_BLACK_4,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+            drawCircle(
+                color = Color.White,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_5,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_BLUE_6,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_7,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_RED_8,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_9,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+            drawCircle(
+                color = Color.Black,
+                radius = state.targetSize * TargetConstants.TARGET_SIZE_GOLD_10,
+                center = size.center,
+                style = Stroke(width = TargetConstants.TARGET_BORDER),
+            )
+
+            state.shots.forEach { shot ->
+                drawCircle(Color.Green, TargetConstants.SHOT_RADIUS, shot)
+            }
+        }
+    }
 }
 
 // TODO eventually use a list of offsets, so app can support targets with multiple faces like Vegas

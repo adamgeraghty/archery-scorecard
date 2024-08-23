@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.adamgeraghty.scorecard.ui.theme.ScorecardTheme
+import com.adamgeraghty.scorecard.theme.ScorecardMaterialTheme
 import org.junit.Rule
 import org.junit.Test
 
@@ -16,7 +16,7 @@ class CollapsibleLazyColumnTest {
     @Test
     fun collapsibleLazyColumn_displaysSectionsAndRows() {
         composeTestRule.setContent {
-            ScorecardTheme {
+            ScorecardMaterialTheme {
                 CollapsibleLazyColumn(
                     sections = listOf(
                         CollapsibleSection(

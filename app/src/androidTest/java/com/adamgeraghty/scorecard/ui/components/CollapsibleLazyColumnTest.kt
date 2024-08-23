@@ -25,11 +25,11 @@ class CollapsibleLazyColumnTest {
                         ),
                         CollapsibleSection(
                             title = "April",
-                            rows = listOf("Score 1", "Score 2", "Score 3"),
+                            rows = listOf("Score 4", "Score 5", "Score 6"),
                         ),
                         CollapsibleSection(
                             title = "March",
-                            rows = listOf("Score 1", "Score 2", "Score 3"),
+                            rows = listOf("Score 7", "Score 8", "Score 9"),
                         ),
                     ),
                     onRowClick = {}
@@ -54,16 +54,16 @@ class CollapsibleLazyColumnTest {
         composeTestRule.onNodeWithText("April").performClick()
 
         // Verify that the rows under "April" are displayed
-        composeTestRule.onNodeWithText("Score 1").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Score 2").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Score 3").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Score 4").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Score 5").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Score 6").assertIsDisplayed()
 
         // Click on the "March" section to expand it
         composeTestRule.onNodeWithText("March").performClick()
 
         // Verify that the rows under "March" are displayed
-        composeTestRule.onNodeWithText("Score 1").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Score 2").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Score 3").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Score 7").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Score 8").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Score 9").assertIsDisplayed()
     }
 }

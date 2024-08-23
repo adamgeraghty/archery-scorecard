@@ -62,11 +62,11 @@ fun HomeScreen(navController: NavController) {
                     ),
                     CollapsibleSection(
                         title = "April",
-                        rows = listOf("Score 1", "Score 2", "Score 3"),
+                        rows = listOf("Score 4", "Score 5", "Score 6"),
                     ),
                     CollapsibleSection(
                         title = "March",
-                        rows = listOf("Score 1", "Score 2", "Score 3"),
+                        rows = listOf("Score 7", "Score 8", "Score 9"),
                     ),
                 ),
                 onRowClick = {

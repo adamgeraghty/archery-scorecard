@@ -18,22 +18,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.adamgeraghty.scorecard.ui.viewmodel.HomeViewModel
 import androidx.navigation.compose.rememberNavController
 import com.adamgeraghty.scorecard.ui.components.ArcheryPreview
 import com.adamgeraghty.scorecard.ui.components.CollapsibleLazyColumn
 import com.adamgeraghty.scorecard.ui.components.CollapsibleSection
 import com.adamgeraghty.scorecard.ui.navigation.Screens
+import com.adamgeraghty.scorecard.ui.viewmodel.HomeViewModel
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navController: NavController,
+    viewModel: HomeViewModel = viewModel(),
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Scores") }) },
         floatingActionButton = {
@@ -57,7 +60,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
         ) {
-            val sections = viewModel.sections.collectAsStateWithLifecycle().value
+            val sections = viewModel.sections.collectAsState().value
             CollapsibleLazyColumn(
                 sections = sections.map { CollapsibleSection(it.title, it.rows) },
                 onRowClick = {

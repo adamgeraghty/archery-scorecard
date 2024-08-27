@@ -9,7 +9,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class CollapsibleLazyColumnTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -32,7 +31,7 @@ class CollapsibleLazyColumnTest {
                             rows = listOf("Score 7", "Score 8", "Score 9"),
                         ),
                     ),
-                    onRowClick = {}
+                    onRowClick = {},
                 )
             }
         }

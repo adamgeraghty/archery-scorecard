@@ -24,7 +24,7 @@ class HomeViewModel
             loadSections()
         }
 
-        private fun loadSections() {
+        fun loadSections() {
             viewModelScope.launch {
                 // Simulate loading data
                 _sections.value = listOf(

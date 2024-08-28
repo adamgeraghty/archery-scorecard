@@ -22,9 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.adamgeraghty.scorecard.theme.ScorecardMaterialTheme
 import com.adamgeraghty.scorecard.ui.components.ArcheryPreview
 import com.adamgeraghty.scorecard.ui.components.CollapsibleLazyColumn
 import com.adamgeraghty.scorecard.ui.components.CollapsibleSection
+import com.adamgeraghty.scorecard.ui.components.FontPreviews
 import com.adamgeraghty.scorecard.ui.navigation.Screens
 import timber.log.Timber
 
@@ -80,7 +82,10 @@ fun HomeScreen(navController: NavController) {
 }
 
 @ArcheryPreview
+@FontPreviews
 @Composable
 fun HomeScreen_Preview() {
-    HomeScreen(navController = rememberNavController())
+    ScorecardMaterialTheme {
+        HomeScreen(navController = rememberNavController())
+    }
 }

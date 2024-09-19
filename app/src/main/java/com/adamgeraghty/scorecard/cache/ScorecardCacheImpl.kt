@@ -12,24 +12,25 @@ class ScorecardCacheImpl
     ) : ScorecardCache {
         private val queries: ScorecardDBQueries = database.scorecardDBQueries
 
-        override fun insertData(data: DataList) {
+        override fun insertShootDate(data: ShootDates) {
             queries.insertData(
                 id = data.id.toLong(),
                 name = data.name,
+                shoot_date = data.date,
             )
         }
 
-        override fun insertData(dataList: List<DataList>) {
-            for (data in dataList) {
-                insertData(data)
+        override fun insertShootDate(shootDates: List<ShootDates>) {
+            for (data in shootDates) {
+                insertShootDate(data)
             }
         }
 
-        override fun getData(): List<DataList> {
+        override fun getAllShootDates(): List<ShootDates> {
             return queries.getData().executeAsList().toDataList()
         }
 
-        override fun deleteData() {
+        override fun deleteAllShootDates() {
             return queries.transaction {
                 queries.deleteData()
             }

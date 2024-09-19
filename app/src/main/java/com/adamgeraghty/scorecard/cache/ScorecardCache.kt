@@ -1,16 +1,17 @@
 package com.adamgeraghty.scorecard.cache
 
 interface ScorecardCache {
-    fun insertData(data: DataList)
+    fun insertShootDate(data: ShootDates)
 
-    fun insertData(dataList: List<DataList>)
+    fun insertShootDate(shootDates: List<ShootDates>)
 
-    fun getData(): List<DataList>
+    fun getAllShootDates(): List<ShootDates>
 
-    fun deleteData()
+    fun deleteAllShootDates()
 }
 
-class DataList(
+class ShootDates(
     val id: Int,
     val name: String,
+    val date: Long,
 )

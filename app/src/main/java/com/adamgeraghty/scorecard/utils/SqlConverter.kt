@@ -1,17 +1,18 @@
 package com.adamgeraghty.scorecard.utils
 
-import com.adamgeraghty.scorecard.cache.DataList
-import com.adamgeraghty.scorecard.db.Data_Entity
+import com.adamgeraghty.scorecard.cache.ShootDates
+import com.adamgeraghty.scorecard.db.Shoot_Dates
 
 object SqlConverter {
-    fun List<Data_Entity>.toDataList(): List<DataList> {
+    fun List<Shoot_Dates>.toDataList(): List<ShootDates> {
         return map { it.toData() }
     }
 
-    private fun Data_Entity.toData(): DataList {
-        return DataList(
+    private fun Shoot_Dates.toData(): ShootDates {
+        return ShootDates(
             id = id.toInt(),
             name = name,
+            date = shoot_date,
         )
     }
 }

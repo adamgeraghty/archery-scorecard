@@ -1,17 +1,19 @@
-CREATE TABLE Data_Entity (
+CREATE TABLE Shoot_Dates (
     id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    shoot_date INTEGER NOT NULL -- Unix timestamp
 );
 
 insertData:
 INSERT OR REPLACE
-INTO Data_Entity(
+INTO Shoot_Dates(
     id,
-    name
-) VALUES (?, ?);
+    name,
+    shoot_date
+) VALUES (?, ?, ?);
 
 getData:
-SELECT * FROM Data_Entity;
+SELECT * FROM Shoot_Dates;
 
 deleteData:
-DELETE FROM Data_Entity;
+DELETE FROM Shoot_Dates;

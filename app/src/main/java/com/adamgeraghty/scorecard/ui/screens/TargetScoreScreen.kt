@@ -56,7 +56,7 @@ sealed class TargetAction {
 
 data class TargetState(
     val score: Int = 0,
-    val targetSize: Float = 500f,
+    val targetSize: Float = TargetConstants.TARGET_SIZE,
     val shotCount: Int = 0,
     val shots: List<Offset> = emptyList(),
     val targetCenterOffset: Offset = Offset(0f, 0f),
@@ -90,7 +90,7 @@ fun targetReducer(
         is TargetAction.ShowZoomedWindow -> {
             state.copy(
                 showZoomedWindow = action.showZoomedWindow,
-                zoomOffset = Offset(action.touchOffset.x, action.touchOffset.y - 500f),
+                zoomOffset = Offset(action.touchOffset.x, action.touchOffset.y - TargetConstants.TARGET_SIZE),
                 touchOffset = Offset(action.touchOffset.x, action.touchOffset.y),
             )
         }
@@ -99,7 +99,7 @@ fun targetReducer(
             var offset = state.touchOffset
             offset += action.moveAmount
             state.copy(
-                zoomOffset = offset.copy(y = offset.y - 500f),
+                zoomOffset = offset.copy(y = offset.y - TargetConstants.TARGET_SIZE),
                 touchOffset = offset,
             )
         }
@@ -412,6 +412,7 @@ object TargetConstants {
     const val TARGET_SCORE_WHITE_1 = 1
     const val SHOT_RADIUS = 10f
     const val TARGET_BORDER = 3f
+    const val TARGET_SIZE = 500f
 }
 
 // Helper function to create a Redux-like store

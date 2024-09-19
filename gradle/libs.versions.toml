@@ -10,13 +10,14 @@ espresso = "3.5.1"
 gradle = "8.4.0"
 gradleVersionsPlugin = "0.51.0"
 hilt = "2.51.1"
+hiltNavigationCompose = "1.2.0"
 junit = "4.13.2"
 kotlinGradlePlugin = "1.9.23"
 kotlinter = "4.3.0"
 ksp = "1.9.23-1.0.20"
 ktxCore = "1.13.1"
 leakCanary = "2.14"
-lifecycle = "2.7.0"
+lifecycle = "2.8.5"
 material = "1.12.0"
 minSdk = "21"
 moshi = "1.15.1"
@@ -32,7 +33,9 @@ android-material = { module = "com.google.android.material:material", version.re
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "ktxCore" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTest" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }

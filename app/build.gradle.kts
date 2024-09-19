@@ -80,7 +80,10 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
+    //    implementation(libs.hilt.android.viewmodel)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.compose.material)
     implementation(libs.compose.ui)
@@ -88,7 +91,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.jakewharton.timber)
     implementation(libs.sqldelight.coroutines)
-//    debugImplementation(libs.square.leakcanary)
+    //    debugImplementation(libs.square.leakcanary)
     implementation(libs.sqldelight.driver)
     implementation(libs.sqldelight.runtime)
     implementation(libs.square.moshi.kotlin)
@@ -101,7 +104,7 @@ dependencies {
 
     // known issue, ksp generated files result in error.NonExistentClass.
     // use kapt instead for now
-//    ksp(libs.hilt.compiler)
+    //    ksp(libs.hilt.compiler)
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)

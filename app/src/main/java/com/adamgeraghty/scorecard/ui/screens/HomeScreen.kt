@@ -20,6 +20,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.adamgeraghty.scorecard.theme.ScorecardMaterialTheme
@@ -28,11 +29,15 @@ import com.adamgeraghty.scorecard.ui.components.CollapsibleLazyColumn
 import com.adamgeraghty.scorecard.ui.components.CollapsibleSection
 import com.adamgeraghty.scorecard.ui.components.FontPreviews
 import com.adamgeraghty.scorecard.ui.navigation.Screens
+import com.adamgeraghty.scorecard.ui.viewmodels.HomeViewModel
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    viewModel: HomeViewModel = hiltViewModel(),
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("Scores") }) },
         floatingActionButton = {
